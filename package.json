@@ -1,0 +1,23 @@
+{
+  "name": "fastify-sceleton",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "ts-node --files  ./server.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "fastify": "^2.12.1",
+    "fastify-mongodb": "^2.0.0",
+    "ts-node": "^8.6.2",
+    "typescript": "^3.8.3"
+  },
+  "devDependencies": {
+    "@types/mongodb": "^3.5.2",
+    "@types/node": "^13.9.1"
+  }
+}
