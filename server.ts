@@ -1,8 +1,6 @@
 import * as fastify from 'fastify'
 
-import dbPlugin from './modules/db/db.fastify.plugin';
-
-import userRoutes from './routes/user.routes';
+import userRoutes from './modules/user/user.routes.plugin';
 
 import configService from './modules/config/config.service';
 
@@ -12,8 +10,7 @@ const server: fastify.FastifyInstance = fastify();
 
 const startServer = () =>
   server
-    .addHook('preHandler', authHook)
-    .register(dbPlugin)
+    .addHook(authHook.type as any, authHook.handler)
     .register(userRoutes)
     .listen(
       configService.getWebServerConfig.httpPort,
@@ -27,4 +24,4 @@ const startServer = () =>
       }
     );
 
-startServer();
+export default startServer;

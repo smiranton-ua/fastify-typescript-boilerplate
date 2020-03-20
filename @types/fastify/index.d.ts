@@ -1,4 +1,3 @@
-import * as fastify from 'fastify';
 import { Server, IncomingMessage, ServerResponse } from 'http';
 import { Http2SecureServer, Http2Server, Http2ServerRequest, Http2ServerResponse } from 'http2';
 import * as https from 'https';
@@ -9,8 +8,11 @@ type HttpResponse = ServerResponse | Http2ServerResponse;
 
 declare module 'fastify' {
 
-  export interface FastifyInstance<HttpServer, HttpRequest, HttpResponse> {
+  export interface FastifyInstance {
     db: any;
+  }
+
+  export interface FastifyReply<HttpResponse> {
   }
 
   export interface FastifyRequest<HttpRequest> {
