@@ -1,9 +1,14 @@
-import startServer from "./server";
-import databaseService from "./modules/db/db.service";
+import startServer from './src/server';
+
+import databaseService from './src/modules/db/db.service';
 
 const startApp = async () => {
-  await databaseService.getDatabase();
-  startServer();
+  try {
+    await databaseService.initDatabase();
+    startServer();
+  } catch(ex) {
+    console.error(ex);
+  }
 };
 
 startApp();

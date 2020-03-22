@@ -1,0 +1,21 @@
+version: '3.7'
+services:
+  dev:
+    container_name: dev-server
+    build: .
+    command: nodemon ./main.ts
+    working_dir: /app
+    volumes:
+      - ./src/:/app/src
+    ports:
+      - 4010:4010
+    links:
+      - mongodb
+  mongodb:
+    container_name: mongo
+    image: mongo:latest
+    volumes:
+      - ./data/db:/data/db
+    ports:
+      - 27018:27017
+    command: mongod
