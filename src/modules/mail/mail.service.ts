@@ -1,3 +1,4 @@
+// @ts-ignore
 import sgMail from '@sendgrid/mail';
 
 import { EmailPayload } from './mail.types';

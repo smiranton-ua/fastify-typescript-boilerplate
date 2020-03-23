@@ -1,12 +1,20 @@
-import MailController from './mail.controllers';
+import { FastifyInstance } from 'fastify';
+
+import MailController from './mail.controller';
 import MailSchemas from './mail.routes.schemas';
-
 import ApiMethods from '../../constants/methodsMap';
-import { URL } from './mail.constants';
 
-const mailRoutesMap = {
-  getUserInfo: {
-    url: URL.SEND_EMAIL,
+import { registerRoutes } from '../../utils';
+
+const PATH = {
+  SEND_EMAIL: 'mailer/send/email',
+  SEND_VIBER: 'mailer/send/viber',
+  SEND_SMS: 'mailer/send/sms',
+};
+
+const routesMap = {
+  sendEmail: {
+    url: PATH.SEND_EMAIL,
     method: ApiMethods.get,
     controller: MailController.sendEmail,
     options: {
@@ -15,4 +23,7 @@ const mailRoutesMap = {
   },
 };
 
-export default mailRoutesMap;
+export default async (fastify: FastifyInstance, _: object, next: Function) => {
+  registerRoutes(fastify, routesMap);
+  next();
+};

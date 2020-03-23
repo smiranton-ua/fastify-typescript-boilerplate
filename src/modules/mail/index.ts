@@ -1,9 +1,3 @@
-import { FastifyInstance } from 'fastify';
-
-import { registerRoutes } from '../../utils';
-import mailRoutesMap from './mail.routes';
-
-export default async (fastify: FastifyInstance, _: object, next: Function) => {
-  registerRoutes(fastify, mailRoutesMap);
-  next();
-};
+export { default as MailController } from './mail.controller';
+export { default as MailService } from './mail.service';
+export { default as MailRoutes } from './mail.routes';

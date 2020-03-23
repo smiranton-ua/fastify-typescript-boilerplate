@@ -1,6 +1,6 @@
 import * as fastify from 'fastify';
 
-import mailerRoutes from './modules/mail';
+import { MailRoutes } from './modules/mail';
 
 import configService from './modules/config/config.service';
 
@@ -14,7 +14,7 @@ const startServer = () => {
   } = configService;
   server
     .addHook(authHook.type as any, authHook.handler)
-    .register(mailerRoutes)
+    .register(MailRoutes)
     .listen(httpPort, hostname, (err: Error, address: string) => {
       if (err) {
         console.error(err);
