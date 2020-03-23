@@ -7,10 +7,7 @@ class EmailService {
   private from = 'test@test.com';
 
   constructor() {
-    sgMail.setApiKey(
-      process.env.SENDGRID_API_KEY ||
-        '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',
-    );
+    sgMail.setApiKey(process.env.SENDGRID_API_KEY);
   }
 
   private sendEmailHtml = ({ to, subject, html }: EmailPayload): void => {
