@@ -1,42 +1,41 @@
+import { Config, MongoConfig, WebServerConfig } from './config.types';
+
 import {
   NO_JWT_SECRET,
   NO_MONGO_CONFIGURATION,
   NO_WEBSERVER_CONFIGURATION,
 } from '../../constants/errors';
 
-import { Config, MongoConfig, WebServerConfig } from './config.interface';
-
 let instance: ConfigService;
 
 class ConfigService {
-  config: Config;
+  private configs: Config;
 
   constructor() {
-    if ( instance ) {
+    if (instance) {
       return instance;
     }
     instance = this;
-    this.config = ConfigService.setAppConfig();
+    this.configs = ConfigService.setAppConfig();
   }
 
   get appConfig(): Config {
-    return this.config;
+    return this.configs;
   }
 
-
   get getMongoConfig(): MongoConfig {
-    if (!this.config.mongo) {
+    if (!this.configs.mongo) {
       throw new Error(NO_MONGO_CONFIGURATION);
     }
-    return this.config.mongo;
+    return this.configs.mongo;
   }
 
   get getWebServerConfig(): WebServerConfig {
-    if (!this.config.webServer) {
+    if (!this.configs.webServer) {
       throw new Error(NO_WEBSERVER_CONFIGURATION);
     }
 
-    return this.config.webServer;
+    return this.configs.webServer;
   }
 
   static get isDevEnv(): boolean {
@@ -52,10 +51,10 @@ class ConfigService {
   }
 
   get getJwtSecret(): string {
-    if (!this.config.jwtSecret) {
+    if (!this.configs.jwtSecret) {
       throw new Error(NO_JWT_SECRET);
     }
-    return this.config.jwtSecret;
+    return this.configs.jwtSecret;
   }
 
   private static readConfigFile(pathToFile: string): Config {
@@ -68,13 +67,17 @@ class ConfigService {
   }
 
   private static setAppConfig(): Config {
-    const defaultConfig = ConfigService.readConfigFile('../../../configs/appConfig.json');
+    const defaultConfig = ConfigService.readConfigFile(
+      '../../../configs/appConfig.json',
+    );
 
     if (!process.env.CONFIG_DIR) {
       return defaultConfig;
     }
 
-    const customConfig = ConfigService.readConfigFile(`../../../../configs/${process.env.CONFIG_DIR}/appConfig.json`);
+    const customConfig = ConfigService.readConfigFile(
+      `../../../../configs/${process.env.CONFIG_DIR}/appConfig.json`,
+    );
 
     return { ...defaultConfig, ...customConfig };
   }

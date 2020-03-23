@@ -1,15 +1,13 @@
 import { Db, MongoClient } from 'mongodb';
 
-import config from '../config/config.service';
-
-import { MongoConfig } from '../config/config.interface';
+import { ConfigService, MongoConfig } from '../config';
 
 class DatabaseService {
   protected dbConfig: MongoConfig;
   private connection: MongoClient;
 
   constructor() {
-    this.dbConfig = config.getMongoConfig;
+    this.dbConfig = ConfigService.getMongoConfig;
   }
 
   async initDatabase(): Promise<Db> {
@@ -23,18 +21,15 @@ class DatabaseService {
 
   protected async setConnection(): Promise<MongoClient> {
     let connection: MongoClient;
-      const options = !this.dbConfig.options
-        ? { useNewUrlParser: true, useUnifiedTopology: true }
-        : Object.assign(
-          this.dbConfig.options,
-          {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-          },
-        );
-      console.log(this.dbConfig.mongoURL);
+    const options = !this.dbConfig.options
+      ? { useNewUrlParser: true, useUnifiedTopology: true }
+      : Object.assign(this.dbConfig.options, {
+          useNewUrlParser: true,
+          useUnifiedTopology: true,
+        });
+    console.log(this.dbConfig.mongoURL);
 
-      connection = new MongoClient(this.dbConfig.mongoURL, options);
+    connection = new MongoClient(this.dbConfig.mongoURL, options);
 
     if (!connection.isConnected()) {
       await connection.connect();
