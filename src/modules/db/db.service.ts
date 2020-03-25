@@ -10,30 +10,30 @@ class DatabaseService {
     this.dbConfig = ConfigService.getMongoConfig;
   }
 
-  async initDatabase(): Promise<Db> {
+  public async initDatabase(): Promise<Db> {
     this.connection = await this.setConnection();
     return this.connection.db(this.dbConfig.database);
   }
 
-  async closeDatabaseConnection(forceClose: boolean = false): Promise<void> {
+  public async closeConnection(forceClose: boolean = false): Promise<void> {
     return this.connection.close(forceClose);
   }
 
   protected async setConnection(): Promise<MongoClient> {
-    let connection: MongoClient;
-    const options = !this.dbConfig.options
-      ? { useNewUrlParser: true, useUnifiedTopology: true }
-      : Object.assign(this.dbConfig.options, {
-          useNewUrlParser: true,
-          useUnifiedTopology: true,
-        });
-    console.log(this.dbConfig.mongoURL);
+    const options = Object.assign(
+      this.dbConfig.options ? this.dbConfig.options : {},
+      {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      },
+    );
 
-    connection = new MongoClient(this.dbConfig.mongoURL, options);
+    const connection = new MongoClient(this.dbConfig.mongoURL, options);
 
     if (!connection.isConnected()) {
       await connection.connect();
     }
+
     return connection;
   }
 }

@@ -1,6 +1,7 @@
 import * as fastify from 'fastify';
 
 import { MailRoutes } from './modules/mail';
+import { DbPlugins } from './modules/db';
 
 import configService from './modules/config/config.service';
 
@@ -15,6 +16,9 @@ const startServer = () => {
 
   server
     .addHook(authHook.type as any, authHook.handler)
+    // plugins
+    .register(DbPlugins)
+    // routes
     .register(MailRoutes)
     .listen(httpPort, hostname, (err: Error, address: string) => {
       if (err) {

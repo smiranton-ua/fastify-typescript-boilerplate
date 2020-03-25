@@ -1,13 +1,10 @@
-FROM node:carbon
+FROM node:12-alpine
 
 WORKDIR /app
 
-RUN npm install -g nodemon
-
 COPY package*.json ./
 
-RUN npm install
+RUN npm install -g nodemon
+RUN npm install --production
 
 COPY . /app
-
-EXPOSE 8080
