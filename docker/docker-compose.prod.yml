@@ -3,7 +3,7 @@ services:
   api:
     container_name: production-server
     restart: always
-    command: npm run dev
+    command: node /app/dist/main.js
     working_dir: /app
     build:
       context: ../

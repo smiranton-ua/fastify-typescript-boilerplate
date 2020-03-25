@@ -1,18 +1,21 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
-    "lib": ["es2016"],
-    "paths": {
-      "*": ["*"]
-    },
-    "allowJs": true,
-    "target": "es2016",
+    "target": "es2015",
     "module": "commonjs",
     "moduleResolution": "node",
-    "sourceMap": true,
+    "resolveJsonModule": false,
+    "sourceMap": false,
     "outDir": "./dist"
   },
-  "include": ["./src/**/*.ts"],
-  "exclude": ["node_modules"],
+  "include": [
+    "configs",
+    "main.ts",
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/*.spec.ts"
+  ],
   "typeRoots": ["./@types", "./node_modules/@types"]
 }

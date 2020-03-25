@@ -7,7 +7,7 @@ class DatabaseService {
   private connection: MongoClient;
 
   constructor() {
-    this.dbConfig = ConfigService.getMongoConfig;
+    this.dbConfig = ConfigService.getMongoConfig();
   }
 
   public async initDatabase(): Promise<Db> {
