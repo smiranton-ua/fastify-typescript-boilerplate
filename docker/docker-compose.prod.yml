@@ -1,16 +1,15 @@
 version: '3.7'
 services:
   api:
-    container_name: development-server
+    container_name: production-server
+    restart: always
+    command: npm run dev
     working_dir: /app
-    command: nodemon main.ts
     build:
       context: ../
-      dockerfile: docker/Dockerfile
+      dockerfile: docker/Dockerfile.prod
     environment:
-      - NODE_ENV=development
-    volumes:
-      - ./src/:/app/src
+      - NODE_ENV=production
     ports:
       - 4010:4010
     links:
@@ -19,9 +18,8 @@ services:
       - mongodb
   mongodb:
     container_name: mongo
+    restart: always
     command: mongod --logpath=/dev/null
     image: mongo:latest
-    volumes:
-      - ./data/db:/data/db
     ports:
       - 27018:27017

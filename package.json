@@ -4,10 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon",
-    "dev": "ts-node --files  ./main.ts",
+    "start": "ts-node --files  ./main.ts",
+    "build": "rm -rf dist && tsc --target es5 -p main.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "format": "./node_modules/.bin/prettier --write --parser typescript --config ./.prettierrc"
+    "format": "./node_modules/.bin/prettier --write --parser typescript --config ./.prettierrc",
+    "docker:dev": "docker-compose -f docker/docker-compose.dev.yml up --build",
+    "docker:prod": "docker-compose -f docker/docker-compose.prod.yml up --build"
   },
   "husky": {
     "hooks": {
