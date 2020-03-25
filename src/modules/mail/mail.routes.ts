@@ -7,9 +7,9 @@ import ApiMethods from '../../constants/methodsMap';
 import { registerRoutes } from '../../utils';
 
 const PATH = {
-  SEND_EMAIL: 'mailer/send/email',
-  SEND_VIBER: 'mailer/send/viber',
-  SEND_SMS: 'mailer/send/sms',
+  SEND_EMAIL: '/mailer/send/email',
+  SEND_VIBER: '/mailer/send/viber',
+  SEND_SMS: '/mailer/send/sms',
 };
 
 const routesMap = {

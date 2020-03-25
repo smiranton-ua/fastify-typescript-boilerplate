@@ -18,4 +18,4 @@ services:
       - ./data/db:/data/db
     ports:
       - 27018:27017
-    command: mongod
+    command: mongod --fork --syslog

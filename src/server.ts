@@ -12,6 +12,7 @@ const startServer = () => {
   const {
     getWebServerConfig: { httpPort, hostname },
   } = configService;
+
   server
     .addHook(authHook.type as any, authHook.handler)
     .register(MailRoutes)
