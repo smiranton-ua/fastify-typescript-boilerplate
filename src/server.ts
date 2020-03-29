@@ -1,29 +1,29 @@
 import * as fastify from 'fastify';
 
+import { SwaggerPlugin } from './modules/swagger';
+import { DbPlugin } from './modules/db';
+
 import { MailRoutes } from './modules/mail';
-import { DbPlugins } from './modules/db';
 
 import configService from './modules/config/config.service';
 
 import authHook from './hooks/auth.hook';
 
-const server: fastify.FastifyInstance = fastify();
+const server: fastify.FastifyInstance = fastify({
+  logger: {
+    level: 'info',
+  },
+});
 
 const startServer = () => {
   const { httpPort, hostname } = configService.getWebServerConfig();
 
-  server
+  return server
     .addHook(authHook.type as any, authHook.handler)
-    .register(DbPlugins)
+    .register(SwaggerPlugin)
+    .register(DbPlugin)
     .register(MailRoutes)
-    .listen(httpPort, hostname, (err: Error, address: string) => {
-      if (err) {
-        console.error(err);
-        process.exit(1);
-      }
-
-      console.log(`Server started, listening on ${address}`);
-    });
+    .listen(httpPort, hostname);
 };
 
 export default startServer;

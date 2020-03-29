@@ -3,7 +3,7 @@ services:
   api:
     container_name: development-server
     working_dir: /app
-    command: nodemon main.ts
+    command: nodemon
     build:
       context: ../
       dockerfile: docker/Dockerfile.dev

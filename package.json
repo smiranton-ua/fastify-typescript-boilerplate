@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node --files  ./main.ts",
+    "start": "ts-node --files  ./src/main.ts",
     "build": "rm -rf dist && tsc -p ./",
     "test": "echo \"Error: no test specified\" && exit 1",
     "format": "./node_modules/.bin/prettier --write --parser typescript --config ./.prettierrc",
@@ -29,6 +29,7 @@
     "dotenv": "^8.2.0",
     "fastify": "^2.12.1",
     "fastify-mongodb": "^2.0.0",
+    "fastify-swagger": "^2.5.0",
     "install": "^0.13.0",
     "nodemon": "^2.0.2",
     "npm": "^6.14.3",
