@@ -1,12 +1,22 @@
+import { FastifyRequest, FastifyReply } from 'fastify';
+
 import MailService from './mail.service';
 
 class EmailController {
-  public sendEmail = async (req, res) => {
+  public sendEmail = async (
+    req: FastifyRequest,
+    res: FastifyReply<{ ok: 1 }>,
+  ) => {
     try {
+      const {
+        query: { email, text, subject },
+      } = req;
+      req.log.info(req.query);
+
       const payload = {
-        to: 'smiranton.kiev@gmail.com',
-        subject: 'test',
-        text: 'test text',
+        to: email,
+        subject,
+        text,
       };
 
       await MailService.sendEmail(payload);

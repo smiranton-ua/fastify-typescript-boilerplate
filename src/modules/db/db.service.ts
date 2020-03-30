@@ -10,7 +10,7 @@ class DatabaseService {
     this.dbConfig = ConfigService.getMongoConfig();
   }
 
-  public async initDatabase(): Promise<Db> {
+  public async initialize(): Promise<Db> {
     this.connection = await this.setConnection();
     return this.connection.db(this.dbConfig.database);
   }

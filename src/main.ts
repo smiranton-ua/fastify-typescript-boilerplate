@@ -1,16 +1,14 @@
 require('dotenv').config();
 
+import { DatabaseService } from './modules/db';
+
 import startServer from './server';
 
-import { DbService } from './modules/db';
-
-const startApp = async () => {
+(async () => {
   try {
-    await DbService.initDatabase();
+    await DatabaseService.initialize();
     await startServer();
   } catch (ex) {
     console.error(ex);
   }
-};
-
-startApp();
+})();

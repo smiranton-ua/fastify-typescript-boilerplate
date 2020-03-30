@@ -1,2 +1,2 @@
-export { default as DbPlugin } from './db.plugin';
-export { default as DbService } from './db.service';
+export { default as DatabasePlugin } from './db.plugin';
+export { default as DatabaseService } from './db.service';

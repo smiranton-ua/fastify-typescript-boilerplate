@@ -1,13 +1,11 @@
 import * as fastify from 'fastify';
 
 import { SwaggerPlugin } from './modules/swagger';
-import { DbPlugin } from './modules/db';
+import { DatabasePlugin } from './modules/db';
 
 import { MailRoutes } from './modules/mail';
 
 import configService from './modules/config/config.service';
-
-import authHook from './hooks/auth.hook';
 
 const server: fastify.FastifyInstance = fastify({
   logger: {
@@ -15,15 +13,18 @@ const server: fastify.FastifyInstance = fastify({
   },
 });
 
-const startServer = () => {
+const startServer = async () => {
   const { httpPort, hostname } = configService.getWebServerConfig();
 
-  return server
-    .addHook(authHook.type as any, authHook.handler)
+  await server
     .register(SwaggerPlugin)
-    .register(DbPlugin)
+    .register(DatabasePlugin)
     .register(MailRoutes)
     .listen(httpPort, hostname);
+
+  server.log.info(
+    `Swagger listening at http://${hostname}:${httpPort}/documentation}`,
+  );
 };
 
 export default startServer;
