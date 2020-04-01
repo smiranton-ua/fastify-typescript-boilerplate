@@ -1,11 +1,11 @@
 {
   "mongo": {
-    "mongoURL": "mongodb://10.80.9.188:27027/SportsDataOperator213"
+    "mongoURL": "mongodb://mongo:27027/SportsDataOperator213"
   },
   "webServer": {
     "hostname": "0.0.0.0",
     "httpPort": 4010,
-    "title": "Sceleton",
+    "title": "Skeleton",
     "globalPathPrefix": "api",
     "basePath": "/api",
     "apiDocumentationPath": "api/api-docs",
