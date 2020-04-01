@@ -21,7 +21,5 @@ services:
     container_name: mongo
     command: mongod --logpath=/dev/null
     image: mongo:latest
-    volumes:
-      - ../data/db:/data/db
     ports:
       - 27018:27017

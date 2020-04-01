@@ -1,30 +1,26 @@
+require('dotenv').config();
 import * as fastify from 'fastify';
 
-import { SwaggerPlugin } from './modules/swagger';
-import { DatabasePlugin } from './modules/db';
+import { ConfigService } from './modules/config';
+import { EventsRoutes } from './modules/events';
 
-import { MailRoutes } from './modules/mail';
-
-import configService from './modules/config/config.service';
-
-const server: fastify.FastifyInstance = fastify({
-  logger: {
-    level: 'info',
-  },
-});
+import { API_PREFIX } from './constants';
 
 const startServer = async () => {
-  const { httpPort, hostname } = configService.getWebServerConfig();
+  const server: fastify.FastifyInstance = fastify({ logger: { level: 'info' } });
+  const {
+    getWebServerConfig: { httpPort, hostname },
+    getSwaggerCongif: { swaggerOption },
+    getMongoConfig: { mongoURL },
+  } = ConfigService;
 
   await server
-    .register(SwaggerPlugin)
-    .register(DatabasePlugin)
-    .register(MailRoutes)
+    .register(require('fastify-swagger'), swaggerOption)
+    .register(require('fastify-mongodb'), { url: mongoURL })
+    .register(EventsRoutes, { prefix: API_PREFIX.EVENTS })
     .listen(httpPort, hostname);
 
-  server.log.info(
-    `Swagger listening at http://${hostname}:${httpPort}/documentation}`,
-  );
+  server.log.info(`Swagger listening at http://${hostname}:${httpPort}/documentation}`);
 };
 
-export default startServer;
+startServer();
