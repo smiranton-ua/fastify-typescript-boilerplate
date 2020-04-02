@@ -1,5 +1,5 @@
 # Development
-docker-compose up --build
+npm run docker:dev
 
 # Production
-docker-compose -f docker-compose.prod.yml up --build
+npm run docker:prod
