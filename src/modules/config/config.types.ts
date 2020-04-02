@@ -2,7 +2,7 @@ import { SocketOptions } from 'mongodb';
 
 export interface MongoConfig {
   mongoURL: string;
-  database: string;
+  database?: string;
   options?: {
     maxStalenessSeconds?: number;
     replicaSet?: string;

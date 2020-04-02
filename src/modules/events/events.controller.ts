@@ -11,10 +11,10 @@ class EventsController {
 
   public searchEvents = async (request: Request, reply: SearchReply) => {
     try {
-      const {
-        params: { search },
-      } = request;
+      const { search } = request.params;
+
       const data = await this.service.searchEvents(search);
+
       reply.code(200).send({ data });
     } catch (ex) {
       request.log.error(ex);

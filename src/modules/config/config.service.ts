@@ -70,14 +70,20 @@ class ConfigService {
     const defaultConfig = this.readConfigFile('../../../configs/appConfig.json');
 
     if (!process.env.CONFIG_DIR) {
-      return defaultConfig;
+      return {
+        ...defaultConfig,
+        ...(process.env.REMOTE_MONGO_DB && { mongo: { mongoURL: process.env.REMOTE_MONGO_DB } }),
+      };
     }
 
     const customConfig = this.readConfigFile(
       `../../../../configs/${process.env.CONFIG_DIR}/appConfig.json`,
     );
 
-    return { ...defaultConfig, ...customConfig };
+    return {
+      ...defaultConfig,
+      ...customConfig,
+    };
   };
 
   public get getSwaggerCongif() {

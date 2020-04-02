@@ -4,7 +4,7 @@ export const API_PREFIX = {
 };
 
 export const API_PATH = {
-  SEARCH_EVENTS: '/search/:params',
+  SEARCH_EVENTS: '/search/:search',
 };
 
 export enum API_METHOD {
