@@ -1,6 +1,6 @@
-# Operator Setting UI
+# Api
 
-This project provides api to work with Operator Settings.
+This project provides skeleton for node.js using fastify.
 
 ## Run
 
