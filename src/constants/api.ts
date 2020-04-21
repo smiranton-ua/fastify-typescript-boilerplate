@@ -1,14 +1,16 @@
-export const API_PREFIX = {
+export const PREFIX = {
   EVENTS: '/api/events',
   MARKETS: '/api/markets',
+  SELECTIONS: '/api/selections'
 };
 
-export const API_PATH = {
-  SEARCH_EVENTS: '/search/:search',
+export const PATH = {
+  GET_BY_ID: '/:id',
+  SEARCH_EVENTS: '/search/:search'
 };
 
-export enum API_METHOD {
+export enum METHOD {
   post = 'post',
   get = 'get',
-  put = 'put',
+  put = 'put'
 }

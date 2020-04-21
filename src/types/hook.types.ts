@@ -1,3 +1,5 @@
+import { RequestType, ReplyType } from './server.types';
+
 export enum ReqResHookTypes {
   preHandler = 'preHandler',
   preParsing = 'preParsing',
@@ -6,16 +8,16 @@ export enum ReqResHookTypes {
   onSend = 'onSend',
   onError = 'onError',
   onRequest = 'onRequest',
-  onResponse = 'onResponse',
+  onResponse = 'onResponse'
 }
 
 export enum AppHookTypes {
   onClose = 'onClose',
   onRoute = 'onRoute',
-  onRegister = 'onRegister',
+  onRegister = 'onRegister'
 }
 
 export interface HookInterface {
   type: ReqResHookTypes;
-  handler: (req: any, res: any, done: Function) => void;
+  handler(req: RequestType, res: ReplyType, done: Function): void;
 }

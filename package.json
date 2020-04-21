@@ -1,19 +1,20 @@
 {
-  "name": "fastify-sceleton",
+  "name": "Opertator-Settings",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
-    "start": "ts-node --files  ./src/server.ts",
+    "start": "ts-node --files  ./src/runner.ts",
     "build": "rm -rf dist && tsc -p ./",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "NODE_ENV=test CONFIG_DIR=test npx jest --silent --verbose --runInBand --detectOpenHandles",
+    "test:cover": "NODE_ENV=test CONFIG_DIR=test npx jest --silent --verbose --runInBand --coverage --detectOpenHandles",
     "format": "./node_modules/.bin/prettier --write --parser typescript --config ./.prettierrc",
     "docker:dev": "docker-compose -f docker/docker-compose.dev.yml up --build",
     "docker:prod": "docker-compose -f docker/docker-compose.prod.yml up --build"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "lint-staged",
+      "pre-push": "npm run test"
     }
   },
   "lint-staged": {
@@ -25,22 +26,30 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@sendgrid/mail": "^6.5.5",
-    "dotenv": "^8.2.0",
+    "@types/jest": "^25.1.5",
+    "@types/lodash": "^4.14.149",
+    "@types/mongodb": "^3.5.2",
+    "@types/node": "^13.9.1",
     "fastify": "^2.12.1",
-    "fastify-mongodb": "^2.0.0",
+    "fastify-cors": "^3.0.3",
+    "fastify-helmet": "^3.0.2",
     "fastify-swagger": "^2.5.0",
     "install": "^0.13.0",
-    "nodemon": "^2.0.2",
+    "lodash": "^4.17.15",
+    "mongodb": "^3.5.6",
     "npm": "^6.14.3",
+    "pino-pretty": "^4.0.0",
+    "statsd-client": "^0.4.4",
     "ts-node": "^8.6.2",
     "typescript": "^3.8.3"
   },
   "devDependencies": {
-    "@types/mongodb": "^3.5.2",
-    "@types/node": "^13.9.1",
     "husky": "^4.2.3",
+    "jest": "^25.2.7",
     "lint-staged": "^10.0.8",
-    "prettier": "^2.0.1"
+    "mongodb-memory-server": "^6.5.1",
+    "nodemon": "^2.0.2",
+    "prettier": "^2.0.1",
+    "ts-jest": "^25.3.0"
   }
 }

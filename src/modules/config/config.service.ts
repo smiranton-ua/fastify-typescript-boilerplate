@@ -1,38 +1,36 @@
-import { Config, MongoConfig, WebServerConfig } from './config.types';
-
 import {
-  NO_WEBSERVER_CONFIGURATION,
-  NO_MONGO_CONFIGURATION,
-  NO_JWT_SECRET,
-} from '../../constants/errors';
+  StatisticConfigType,
+  WebServerConfigType,
+  MongoConfigType,
+  ConfigType
+} from './config.types';
 
-let instance: ConfigService;
+import { SELECTION_MODEL } from '../selections';
+import { MARKET_MODEL } from '../markets';
+import { EVENT_MODEL } from '../events';
+import { ERRORS } from '../../constants';
 
 class ConfigService {
-  private configs: Config;
+  private configs: ConfigType;
 
   constructor() {
-    if (instance) {
-      return instance;
-    }
-    instance = this;
     this.configs = this.setAppConfig();
   }
 
-  public appConfig(): Config {
+  public get appConfig(): ConfigType {
     return this.configs;
   }
 
-  public get getMongoConfig(): MongoConfig {
+  public get getMongoConfig(): MongoConfigType {
     if (!this.configs.mongo) {
-      throw new Error(NO_MONGO_CONFIGURATION);
+      throw new Error(ERRORS.NO_MONGO_CONFIGURATION);
     }
     return this.configs.mongo;
   }
 
-  public get getWebServerConfig(): WebServerConfig {
+  public get getWebServerConfig(): WebServerConfigType {
     if (!this.configs.webServer) {
-      throw new Error(NO_WEBSERVER_CONFIGURATION);
+      throw new Error(ERRORS.NO_WEBSERVER_CONFIGURATION);
     }
 
     return this.configs.webServer;
@@ -47,17 +45,17 @@ class ConfigService {
   }
 
   public get isTestEnv(): boolean {
-    return process.env.CONFIG_DIR?.toLowerCase() === 'test';
+    return process.env.NODE_ENV?.toLowerCase() === 'test';
   }
 
   public getJwtSecret(): string {
     if (!this.configs.jwtSecret) {
-      throw new Error(NO_JWT_SECRET);
+      throw new Error(ERRORS.NO_JWT_SECRET);
     }
     return this.configs.jwtSecret;
   }
 
-  private readConfigFile = (pathToFile: string): Config => {
+  private readConfigFile = (pathToFile: string): ConfigType => {
     try {
       return require(pathToFile);
     } catch (err) {
@@ -66,47 +64,78 @@ class ConfigService {
     }
   };
 
-  private setAppConfig = (): Config => {
-    const defaultConfig = this.readConfigFile('../../../configs/appConfig.json');
+  private setAppConfig = (): ConfigType => {
+    const defaultConfig = this.readConfigFile(
+      '../../../configs/development/appConfig.json'
+    );
 
+    console.log(process.env.CONFIG_DIR);
     if (!process.env.CONFIG_DIR) {
-      return {
-        ...defaultConfig,
-        ...(process.env.REMOTE_MONGO_DB && { mongo: { mongoURL: process.env.REMOTE_MONGO_DB } }),
-      };
+      return defaultConfig;
     }
 
     const customConfig = this.readConfigFile(
-      `../../../../configs/${process.env.CONFIG_DIR}/appConfig.json`,
+      `../../../configs/${process.env.CONFIG_DIR}/appConfig.json`
     );
 
     return {
       ...defaultConfig,
-      ...customConfig,
+      ...customConfig
     };
   };
 
-  public get getSwaggerCongif() {
+  public get getStatisticsConfig(): StatisticConfigType {
+    return this.configs.stats;
+  }
+
+  public get getSwaggerConfig() {
+    const { httpPort, hostname, apiDocumentationPath } = this.getWebServerConfig;
     return {
-      swaggerOption: {
-        swagger: {
-          info: {
-            title: 'Notification manager swagger',
-            description: 'testing the fastify swagger api',
-            version: '0.1.0',
-          },
-          externalDocs: {
-            url: 'https://swagger.io',
-            description: 'Find more info here',
-          },
-          host: 'localhost',
-          schemes: ['http'],
-          consumes: ['application/json'],
-          produces: ['application/json'],
-          definitions: {},
+      routePrefix: apiDocumentationPath,
+      exposeRoute: true,
+      swagger: {
+        validatorUrl: null,
+        info: {
+          title: 'Operator settings',
+          description: 'Operator settings api documentation',
+          version: '1.0.0'
         },
-        exposeRoute: true,
-      },
+        host: `${hostname}:${httpPort}`,
+        schemes: ['http'],
+        consumes: ['application/json'],
+        produces: ['application/json'],
+        components: {
+          schemas: {
+            user: {
+              properties: {
+                id: {
+                  type: 'integer'
+                },
+                name: {
+                  type: 'string'
+                }
+              }
+            }
+          }
+        },
+        definitions: {
+          Event: {
+            $id: 'Event',
+            type: 'object',
+            properties: EVENT_MODEL
+          },
+          Market: {
+            $id: 'Market',
+            type: 'object',
+            properties: MARKET_MODEL
+          },
+          Selection: {
+            $id: 'Selection',
+            type: 'object',
+            properties: SELECTION_MODEL
+          }
+        }
+      }
     };
   }
 }

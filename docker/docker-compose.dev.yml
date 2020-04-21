@@ -1,25 +1,27 @@
 version: '3.7'
 services:
-  api:
-    container_name: development-server
+  api-development:
+    container_name: api-development
     working_dir: /app
     command: nodemon
     build:
       context: ../
       dockerfile: docker/Dockerfile.dev
     environment:
-      - NODE_ENV=production
+      - CONFIG_DIR=development
+      - NODE_ENV=development
     volumes:
       - ../src/:/app/src
     ports:
-      - 4010:4010
+      - "8000:8000"
     links:
       - mongodb
     depends_on:
       - mongodb
   mongodb:
     container_name: mongo
-    command: mongod --logpath=/dev/null
-    image: mongo:latest
+    build:
+      context: ../
+      dockerfile: docker/mongo/Dockerfile
     ports:
-      - 27018:27017
+      - "27018:27017"

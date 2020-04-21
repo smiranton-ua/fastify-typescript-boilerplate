@@ -1,25 +1,24 @@
 version: '3.7'
 services:
-  api:
-    container_name: production-server
-    restart: always
-    command: node /app/dist/main.js
+  api-production:
+    container_name: api-production
+    command: node /app/dist/runner.js
     working_dir: /app
     build:
       context: ../
       dockerfile: docker/Dockerfile.prod
     environment:
+      - CONFIG_DIR=production
       - NODE_ENV=production
     ports:
-      - 4010:4010
+      - "8000:8000"
     links:
       - mongodb
     depends_on:
       - mongodb
   mongodb:
     container_name: mongo
-    restart: always
     command: mongod --logpath=/dev/null
     image: mongo:latest
     ports:
-      - 27018:27017
+      - "27018:27017"

@@ -1,26 +1,41 @@
-require('dotenv').config();
 import * as fastify from 'fastify';
+import * as fastifyCors from 'fastify-cors';
+import * as fastifyHelmet from 'fastify-helmet';
+import * as fastifySwagger from 'fastify-swagger';
 
-import { ConfigService } from './modules/config';
-import { EventsRoutes } from './modules/events';
+import { EventsRoutes, EventsPlugin } from './modules/events';
+import { SelectionsPlugin } from './modules/selections';
+import { MarketsPlugin } from './modules/markets';
+import { StatsPlugin } from './modules/stats';
+import { DbPlugin } from './modules/db';
 
-import { API_PREFIX } from './constants';
+import { API } from './constants';
 
-const startServer = async () => {
-  const server: fastify.FastifyInstance = fastify({ logger: { level: 'info' } });
-  const {
-    getWebServerConfig: { httpPort, hostname },
-    getSwaggerCongif: { swaggerOption },
-    getMongoConfig: { mongoURL },
-  } = ConfigService;
+export const createServer = async ({
+  swaggerConfig,
+  fastifyConfig,
+  mongoConfig,
+  statsConfig
+}): Promise<fastify.FastifyInstance> => {
+  const server = fastify(fastifyConfig);
 
-  await server
-    .register(require('fastify-swagger'), swaggerOption)
-    .register(require('fastify-mongodb'), { url: mongoURL })
-    .register(EventsRoutes, { prefix: API_PREFIX.EVENTS })
-    .listen(httpPort, hostname);
+  server
+    // Configs
+    .register(fastifyCors)
+    .register(fastifyHelmet)
+    .register(fastifySwagger, swaggerConfig)
 
-  server.log.info(`Swagger listening at http://${hostname}:${httpPort}/documentation}`);
+    // Custom plugins
+    .register(DbPlugin, mongoConfig)
+    .register(StatsPlugin, statsConfig)
+    .register(SelectionsPlugin)
+    .register(MarketsPlugin)
+    .register(EventsPlugin)
+
+    // APIs modules
+    .register(EventsRoutes, { prefix: API.PREFIX.EVENTS });
+  // .register(SelectionsRoutes, { prefix: API.PREFIX.SELECTIONS })
+  // .register(MarketsRoutes, { prefix: API.PREFIX.MARKETS })
+
+  return server;
 };
-
-startServer();

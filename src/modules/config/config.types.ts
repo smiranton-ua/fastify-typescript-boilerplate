@@ -1,7 +1,7 @@
 import { SocketOptions } from 'mongodb';
 
-export interface MongoConfig {
-  mongoURL: string;
+export interface MongoConfigType {
+  url: string;
   database?: string;
   options?: {
     maxStalenessSeconds?: number;
@@ -12,7 +12,13 @@ export interface MongoConfig {
   };
 }
 
-export interface WebServerConfig {
+export interface StatisticConfigType {
+  host: string;
+  ports: string;
+  prefix: string;
+}
+
+export interface WebServerConfigType {
   apiDocumentationPath: string;
   basePath: string;
   corsOptions: boolean;
@@ -23,8 +29,9 @@ export interface WebServerConfig {
   title: string;
 }
 
-export interface Config {
-  mongo: MongoConfig;
-  webServer: WebServerConfig;
+export interface ConfigType {
+  stats: StatisticConfigType;
+  mongo: MongoConfigType;
+  webServer: WebServerConfigType;
   jwtSecret: string;
 }

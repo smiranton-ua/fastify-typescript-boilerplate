@@ -1,0 +1,21 @@
+{
+  "mongo": {
+    "url": "mongodb://mongo:27017/",
+    "database": "SportsData"
+  },
+  "webServer": {
+    "hostname": "0.0.0.0",
+    "httpPort": 8000,
+    "title": "Skeleton",
+    "globalPathPrefix": "api",
+    "basePath": "/api",
+    "apiDocumentationPath": "/api/docs",
+    "corsOptions": true
+  },
+  "stats": {
+    "host": "localhost",
+    "port": 8125,
+    "prefix": "test"
+  },
+  "jwtSecret": "top secret"
+}
